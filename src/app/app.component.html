@@ -1,0 +1,10 @@
+<div class="main-container">
+    <ng-container *ngIf="isLoggedIn$ | async; else showLogin">
+      <app-side-bar></app-side-bar>
+      <router-outlet></router-outlet>
+    </ng-container>
+    <ng-template #showLogin>
+      <app-login-component></app-login-component>
+    </ng-template>
+  </div>
+

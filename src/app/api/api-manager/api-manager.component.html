@@ -1,0 +1,54 @@
+<div>    
+    <div class="chat-input">
+        <textarea #textareaRef [(ngModel)]="userQuestion" (input)="adjustTextareaHeight(textareaRef)" placeholder="How can I help you today?"></textarea>
+        <!-- <textarea  type="text" [(ngModel)]="userQuestion" placeholder="How can I help you today?"></textarea> -->
+        <button (click)="submitQuestion()" class="submitButton">submit</button>
+    </div>
+    <div *ngIf="answerWhichApi" class="conversation-container">
+        <div *ngFor="let dialogue of dialogues">
+            <div *ngIf="dialogue.sender === 'user'" class="DialogBG">
+                <span class="icon user-icon"></span>
+                <span class="label">User：</span>
+                <div class="user-message">
+                    <p>{{ dialogue.message }}</p>
+                </div>    
+            </div>
+            <div *ngIf="dialogue.sender === 'Gemini'" class="DialogBG">
+                <span class="icon agent-icon"></span>
+                <span class="label">Flomad Agent:</span>
+                <div class="api-message">
+                    <p>{{ dialogue.message }}</p>
+                </div> 
+            </div>
+            <div *ngIf="dialogue.sender === 'flightTicket'" class="DialogBG">
+                <div *ngIf="answerFlightOffersPara">
+                    <span class="icon agent-icon"></span>
+                    <span class="label">Flomad Agent:</span>
+                    <!-- <p>{{ answerFlightOffersPara }}</p>  -->
+                    <div *ngIf="flightOffers" class="api-message">
+                        <h3>Flight Offers:</h3>
+                        <div *ngFor="let offer of flightOffers.data; let i = index" class="card mb-3">
+                            <div class="card-header">
+                                <h5 class="mb-0">Offer {{ i + 1 }} - {{ offer.price.total }} {{ offer.price.currency }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <div *ngFor="let itinerary of offer.itineraries; let j = index">
+                                    <h6>Itinerary {{ j + 1 }}: {{ itinerary.duration | duration }}</h6>
+                                    <div *ngFor="let segment of itinerary.segments">
+                                        <p>
+                                            <strong>Flight:</strong> {{ segment.carrierCode }}{{ segment.number }}<br>
+                                            <strong>Departure:</strong> {{ segment.departure.at | date: 'short' }} from {{ segment.departure.iataCode }}<br>
+                                            <strong>Arrival:</strong> {{ segment.arrival.at | date: 'short' }} at {{ segment.arrival.iataCode }}<br>
+                                            <!-- <strong>Aircraft:</strong> {{ aircrafts[segment.aircraft.code] }} -->
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- <button type="button" class="btn btn-primary" (click)="verifyFlightOffer(offer)">Verify Offer</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>

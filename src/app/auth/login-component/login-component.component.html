@@ -1,0 +1,36 @@
+<!-- <p>login-component works!</p>
+<div>
+    <button (click)="onLogin()">Login</button>
+    <button (click)="onRegister()">Sign Up</button>
+  </div>
+
+<div>
+  <input type="email" [(ngModel)]="email" placeholder="Enter your email">
+  <input type="password" [(ngModel)]="password" placeholder="Enter your password">
+  <button (click)="onLogin()">Login</button>
+  <button (click)="onRegister()">Sign Up</button>
+</div> -->
+
+
+
+<main class="box">
+  <h2>Login</h2>
+  <form>
+    <div class="inputBox">
+      <label for="userName">Email</label>
+      <input type="text" name="email" [(ngModel)]="email" placeholder="type your email" required/>
+    </div>
+    <div class="inputBox">
+      <label for="userPassword">Password</label>
+      <input type="password" name="userPassword" [(ngModel)]="password" id="userPassword" placeholder="type your password"
+             required/>
+    </div>
+    <div>
+      <button type="submit" name="" style="float: left;" (click)="onLogin()">Sign In</button>
+      <button type="submit" name="" style="float: left;" (click)="onRegister()">Sign Up</button>
+      <!-- <a class="button" [routerLink]="'/register'" style="float: left;">Register</a> -->
+    </div>
+  </form>
+</main>
+<footer>
+</footer>

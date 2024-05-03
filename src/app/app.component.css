@@ -1,0 +1,14 @@
+  .main-container {
+    display: flex; /* 启用Flexbox布局 */
+    height: 100vh; /* 可选，如果你想要容器填满整个视口的高度 */
+  }
+  
+  app-side-bar {
+    flex: 0 0 400px; /* 为侧边栏分配固定宽度，例如200px */
+    /* 根据需要调整，例如添加背景色、填充等 */
+  }
+  
+  dashboard {
+    flex-grow: 1; /* 让dashboard组件占据剩余的空间 */
+    /* 根据需要进行样式调整 */
+  }

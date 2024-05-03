@@ -1,0 +1,24 @@
+<div class="sidebar">
+    
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="page_link">Dashboard</a>
+        <a routerLink="/flight_offers" routerLinkActive="active" class="page_link">Flight Offers</a>
+        <a routerLink="/api-manager" routerLinkActive="active" class="page_link">API Manager</a>
+        <a routerLink="/reference-data" routerLinkActive="active" class="page_link">reference-data</a>
+        <div>
+        <a routerLink="/google-map" routerLinkActive="active" class="page_link">google-map</a>
+    </div>
+    <!-- <a routerLink="/conversation" routerLinkActive="active">conversation</a> -->
+    <div class="conversation-link" routerLink="/conversation" routerLinkActive="active">
+        conversation
+        <div class="session_bundle">
+            <div *ngFor="let session of sessions">
+                <!-- <a (click)="onSessionClick(session.sessionId)" class="session_link">{{ session.title }}</a> -->
+                <a (click)="onSessionClick(session.sessionId)"
+                    [class.active]="activeSessionId === session.sessionId"
+                    class="session_link">{{ session.title }}</a>
+            </div>
+            
+        </div>
+        <button (click)="addSession()" class="addSessionButton">Add Session</button>
+    </div>
+</div>

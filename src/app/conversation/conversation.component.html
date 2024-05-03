@@ -1,0 +1,22 @@
+<div class="conversation-container">    
+    <div *ngFor="let dialogue of dialogues">
+        <div *ngIf="dialogue.sender === 'user'" class="DialogBG">
+            <span class="icon user-icon"></span>
+            <span class="label">User：</span>
+            <div class="user-message">
+                <p>{{ dialogue.message }}</p>
+            </div>    
+        </div>
+        <div *ngIf="dialogue.sender === 'agent'" class="DialogBG">
+            <span class="icon agent-icon"></span>
+            <span class="label">Flomad Agent:</span>
+            <div class="api-message">
+                <p>{{ dialogue.message }}</p>
+            </div> 
+        </div>
+    </div> 
+</div>
+<div class="chat-input">
+    <textarea #textareaRef [(ngModel)]="userMessage" (input)="adjustTextareaHeight(textareaRef)" placeholder="How can I help you today?"></textarea>
+    <button (click)="sendMessage()" class="submitButton">submit</button>
+</div>
