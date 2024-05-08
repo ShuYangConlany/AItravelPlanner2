@@ -4,6 +4,7 @@ import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-reference-data',
@@ -13,13 +14,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './reference-data.component.css'
 })
 export class ReferenceDataComponent {
+  constructor(private http: HttpClient) {}
   IATAcode: string = '';
   cityName: string = '';
   errorMessage: string = '';
-  constructor(private http: HttpClient) {}
+  apiUrl = environment.apiUrl;
 
   onSubmit(): void {
-    const url = 'http://localhost:8080/reference_data';
+    const url = this.apiUrl+'reference_data';
     const params = new HttpParams().set('cityName', this.cityName);
     this.http.get(url, { params: params }).subscribe({
       next: (response: any) => {

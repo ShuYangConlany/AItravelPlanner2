@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DurationPipe } from './duration.pipe';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'flight_offers',
@@ -13,6 +14,7 @@ import { DurationPipe } from './duration.pipe';
   imports: [FormsModule,CommonModule,RouterModule,HttpClientModule,DurationPipe ] // import FormsModule
 })
 export class FlightOffersComponent implements OnInit {
+  constructor(private http: HttpClient) { }
   formData = {
     originLocationCode: '',
     destinationLocationCode: '',
@@ -22,15 +24,15 @@ export class FlightOffersComponent implements OnInit {
     max: 3
   };
   flightOffers: any;
-
-  constructor(private http: HttpClient) { }
+  apiUrl = environment.apiUrl;
+  
 
   ngOnInit(): void {
   }
   
   verifyFlightOffer(offer: any) {
     console.log('offer successful', offer);
-    const verifyUrl = 'http://localhost:8080/pricing';
+    const verifyUrl = this.apiUrl+'pricing';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'X-HTTP-Method-Override':'GET'
@@ -53,7 +55,7 @@ export class FlightOffersComponent implements OnInit {
     }
   }
   submitForm() {
-    const url = 'http://localhost:8080/flight-offers';
+    const url = this.apiUrl+'flight-offers';
     this.http.get(url, { params: this.formData }).subscribe({
       next: (data) => {
         this.flightOffers = data;

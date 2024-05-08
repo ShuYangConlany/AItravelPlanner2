@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 ////////////////////////////////////////////
 /**
@@ -14,9 +15,10 @@ import { HttpClientModule } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ReferenceDataService {
-  private url = 'http://localhost:8080/reference_data'; 
   constructor(private http: HttpClient) {}
-
+  apiUrl = environment.apiUrl;
+  private url = this.apiUrl+'reference_data'; 
+  
   getReferenceData(cityName: string): Observable<any> {
     const params = new HttpParams().set('cityName', cityName);
     return this.http.get(this.url, { params: params }).pipe(

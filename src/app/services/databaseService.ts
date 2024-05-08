@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { Speaker } from './speaker';
+import { environment } from '../../environments/environment';
 
 ////////////////////////////////////////////
 /**
@@ -13,9 +14,11 @@ import { Speaker } from './speaker';
   providedIn: 'root'
 })
 export class databaseService {
-  private apiSaveMessage = 'http://localhost:8080/messagesPersistence';
-  private apiBaseUrl = 'http://localhost:8080/messagesPersistence';
   constructor(private http: HttpClient) {}
+  apiUrl = environment.apiUrl;
+  private apiSaveMessage = this.apiUrl+'messagesPersistence';
+  private apiBaseUrl = this.apiUrl+'messagesPersistence';
+  
 
   /**
    * @method

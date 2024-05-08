@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { NONE_TYPE } from '@angular/compiler';
 import { FlightOfferReqService } from '../../services/FlightOfferReqService';
 import { DurationPipe } from "../flight-offers/duration.pipe";
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-gemini-query',
@@ -17,6 +18,7 @@ import { DurationPipe } from "../flight-offers/duration.pipe";
     imports: [FormsModule, CommonModule, RouterModule, HttpClientModule, DurationPipe] // import FormsModule
 })
 export class ApiManagerComponent {
+  constructor(private http: HttpClient,private flightOfferReqService: FlightOfferReqService) {}
   userQuestion: string = '';
   answerWhichApi: string | null = null;
   GeminiNewResponse: string | null = null;
@@ -24,8 +26,7 @@ export class ApiManagerComponent {
   flightOffers: any;
   dialogues: Array<{ sender: 'user' | 'Gemini' | 'flightTicket', message: string | object }> = [];
   tickets: Array<{message: string }> = [];
-
-  constructor(private http: HttpClient,private flightOfferReqService: FlightOfferReqService) {}
+  apiUrl = environment.apiUrl;
 
   adjustTextareaHeight(textarea: HTMLTextAreaElement) {
     textarea.style.height = 'auto';
@@ -37,7 +38,7 @@ export class ApiManagerComponent {
     const prompt = `I have a program that is designed to answer user questions about travel, involving API calls. 
     The question below may require calling an API to look up flight information. Should I make that API call, answering 'flight' or 'no': "${this.userQuestion}"`;
     this.dialogues.push({ sender: 'user', message: this.userQuestion });
-    this.http.post<any>('http://localhost:8080/generate-content', { prompt }).subscribe(response => {
+    this.http.post<any>(this.apiUrl+'generate-content', { prompt }).subscribe(response => {
       this.answerWhichApi = response.candidates[0].content.parts.map((part: { text: any; }) => part.text).join(' ');
       // if (this.answerWhichApi){
       //   this.dialogues.push({ sender: 'Gemini', message: this.answerWhichApi });
@@ -72,7 +73,7 @@ export class ApiManagerComponent {
       }
     } else {
       const prompt = `"${this.userQuestion}"`;
-      this.http.post<any>('http://localhost:8080/generate-content', { prompt }).subscribe(response => {
+      this.http.post<any>(this.apiUrl+'generate-content', { prompt }).subscribe(response => {
         this.GeminiNewResponse = response.candidates[0].content.parts.map((part: { text: any; }) => part.text).join(' ');
         if (this.GeminiNewResponse){
           this.dialogues.push({ sender: 'Gemini', message: this.GeminiNewResponse });
@@ -88,7 +89,7 @@ export class ApiManagerComponent {
     (time in format:YYYY-MM-DD,the answer should be in the format,with"-" to seperate the digits,pay attention). Otherwise, please return in the format 'Please provide additional information' + all missing information in 
     User's question "${this.userQuestion}"`;
     return new Promise((resolve, reject) => {
-      this.http.post<any>('http://localhost:8080/generate-content', { prompt })
+      this.http.post<any>(this.apiUrl+'generate-content', { prompt })
         .subscribe({
           next: (response) => {
             this.answerFlightOffersPara = response.candidates[0].content.parts.map((part: { text: any; }) => part.text).join(' ');
@@ -104,7 +105,7 @@ export class ApiManagerComponent {
   }
 
   submitFormFlightOffers(formData:any) {
-    const url = 'http://localhost:8080/flight-offers';
+    const url = this.apiUrl+'flight-offers';
     this.http.get(url, { params: formData }).subscribe({
       next: (data) => {
         this.flightOffers = data;
