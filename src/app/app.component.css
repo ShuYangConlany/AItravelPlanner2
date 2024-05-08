@@ -1,0 +1,12 @@
+  .main-container {
+    display: flex; 
+    height: 100vh; 
+  }
+  
+  app-side-bar {
+    flex: 0 0 400px; 
+  }
+  
+  dashboard {
+    flex-grow: 1; 
+  }

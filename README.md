@@ -25,3 +25,12 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+  // "scripts": {
+  //   "ng": "ng",
+  //   "start": "ng serve",
+  //   "build": "ng build",
+  //   "watch": "ng build --watch --configuration development",
+  //   "test": "ng test",
+  //   "serve:ssr:angular-AI-planner": "node dist/angular-ai-planner/server/server.mjs"
+  // },

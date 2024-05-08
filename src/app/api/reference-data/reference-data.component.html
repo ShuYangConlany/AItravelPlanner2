@@ -1,0 +1,10 @@
+
+<div>
+    <input type="text" [(ngModel)]="cityName" placeholder="Enter City Name">
+    <button (click)="onSubmit()">Get Airport Code</button>
+</div>
+  
+<div *ngIf="IATAcode">
+    Airport Code: {{ IATAcode }}
+</div>
+  
