@@ -16,8 +16,8 @@ import { environment } from '../../environments/environment';
 export class databaseService {
   constructor(private http: HttpClient) {}
   apiUrl = environment.apiUrl;
-  private apiSaveMessage = this.apiUrl+'messagesPersistence';
-  private apiBaseUrl = this.apiUrl+'messagesPersistence';
+  private apiSaveMessage = this.apiUrl+'/messagesPersistence';
+  private apiBaseUrl = this.apiUrl+'/messagesPersistence';
   
 
   /**

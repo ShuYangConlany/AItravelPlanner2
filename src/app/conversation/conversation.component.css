@@ -26,6 +26,7 @@
     border-radius: 20px; 
     padding: 10px; 
     margin: 10px 0; 
+    width: fit-content;
   }
 
   .user-icon {
@@ -37,15 +38,14 @@
     background-image: url('/assets/agentIcon.png'); 
   }
 
-.conversation-container {
-  height: calc(100vh - 120px); 
-  width: calc(100% - 200px);
-  margin-left: 200px; /* 左边留出20px空间 */
-  margin-right: auto;
-  /* margin: 0 auto;  */
-  overflow-y: auto;
-  padding-bottom: 100px;
-}
+  .conversation-container {
+    height: calc(100vh - 120px);
+    width: calc(100% - 400);
+    margin-left: 200px;
+    margin-right: 200px;
+    overflow-y: auto;
+    padding-bottom: 100px;
+  }
   .chat-input {
     width: 50%; 
     position: fixed;
@@ -68,7 +68,7 @@ textarea {
 }
 
 .submitButton {
-  background-color: #4CAF50; /* Green */
+  background-color: #4CAF50;
   border: none;
   color: white;
   padding: 8px 10px;
@@ -78,5 +78,5 @@ textarea {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-  border-radius: 8px; /* 设置圆角 */
+  border-radius: 8px; 
 }

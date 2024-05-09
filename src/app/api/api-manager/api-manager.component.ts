@@ -38,7 +38,7 @@ export class ApiManagerComponent {
     const prompt = `I have a program that is designed to answer user questions about travel, involving API calls. 
     The question below may require calling an API to look up flight information. Should I make that API call, answering 'flight' or 'no': "${this.userQuestion}"`;
     this.dialogues.push({ sender: 'user', message: this.userQuestion });
-    this.http.post<any>(this.apiUrl+'generate-content', { prompt }).subscribe(response => {
+    this.http.post<any>(this.apiUrl+'/generate-content', { prompt }).subscribe(response => {
       this.answerWhichApi = response.candidates[0].content.parts.map((part: { text: any; }) => part.text).join(' ');
       // if (this.answerWhichApi){
       //   this.dialogues.push({ sender: 'Gemini', message: this.answerWhichApi });
@@ -73,7 +73,7 @@ export class ApiManagerComponent {
       }
     } else {
       const prompt = `"${this.userQuestion}"`;
-      this.http.post<any>(this.apiUrl+'generate-content', { prompt }).subscribe(response => {
+      this.http.post<any>(this.apiUrl+'/generate-content', { prompt }).subscribe(response => {
         this.GeminiNewResponse = response.candidates[0].content.parts.map((part: { text: any; }) => part.text).join(' ');
         if (this.GeminiNewResponse){
           this.dialogues.push({ sender: 'Gemini', message: this.GeminiNewResponse });
@@ -89,7 +89,7 @@ export class ApiManagerComponent {
     (time in format:YYYY-MM-DD,the answer should be in the format,with"-" to seperate the digits,pay attention). Otherwise, please return in the format 'Please provide additional information' + all missing information in 
     User's question "${this.userQuestion}"`;
     return new Promise((resolve, reject) => {
-      this.http.post<any>(this.apiUrl+'generate-content', { prompt })
+      this.http.post<any>(this.apiUrl+'/generate-content', { prompt })
         .subscribe({
           next: (response) => {
             this.answerFlightOffersPara = response.candidates[0].content.parts.map((part: { text: any; }) => part.text).join(' ');
@@ -105,7 +105,7 @@ export class ApiManagerComponent {
   }
 
   submitFormFlightOffers(formData:any) {
-    const url = this.apiUrl+'flight-offers';
+    const url = this.apiUrl+'/flight-offers';
     this.http.get(url, { params: formData }).subscribe({
       next: (data) => {
         this.flightOffers = data;

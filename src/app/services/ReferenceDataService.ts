@@ -17,7 +17,7 @@ import { environment } from '../../environments/environment';
 export class ReferenceDataService {
   constructor(private http: HttpClient) {}
   apiUrl = environment.apiUrl;
-  private url = this.apiUrl+'reference_data'; 
+  private url = this.apiUrl+'/reference_data'; 
   
   getReferenceData(cityName: string): Observable<any> {
     const params = new HttpParams().set('cityName', cityName);

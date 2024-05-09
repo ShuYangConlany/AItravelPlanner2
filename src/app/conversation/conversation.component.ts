@@ -10,7 +10,7 @@ import { OnInit } from '@angular/core';
 import { DurationPipe } from '../api/flight-offers/duration.pipe';
 import { SessionInteractionService } from '../services/sessionInteractionService';
 import { authFactory } from '../auth/login-component/authFactory';
-
+import {conversationService}  from '../services/conversationService';
 ////////////////////////////////////////////
 /**
  * @class
@@ -38,8 +38,10 @@ export class ConversationComponent implements OnInit {
   responseMessage: string = '';
   userMessage: any;
   dialogues: Array<{ sender: 'user' | 'agent', message: string | object }> = [];
+  formattedDialogues: string = "";
   userId!: string;
   sessionId!: string;
+  
 
 
   /**
@@ -51,7 +53,8 @@ export class ConversationComponent implements OnInit {
   constructor(private dialogflowService: dialogflowService, 
     private databaseService: databaseService,
     private sessionInteraction: SessionInteractionService,
-    @Inject('authService') private authService: any) { }
+    @Inject('authService') private authService: any,
+    private conversationService: conversationService) { }
 
   /**
    * @init
@@ -64,13 +67,14 @@ export class ConversationComponent implements OnInit {
     this.sessionInteraction.currentSessionId.subscribe(sessionId => {
       if (sessionId) {
         this.loadSessionMessages(sessionId);
-      }
-    });
-    this.sessionInteraction.currentSessionId.subscribe(sessionId => {
-      if (sessionId) {
         this.sessionId=sessionId;
       }
     });
+    // this.sessionInteraction.currentSessionId.subscribe(sessionId => {
+    //   if (sessionId) {
+        
+    //   }
+    // });
     this.fetchUserId()
   }
 
@@ -120,17 +124,43 @@ export class ConversationComponent implements OnInit {
     });
 
     this.dialogues.push({ sender: 'user', message: this.userMessage });
+    this.formattedDialogues+='user:'+this.userMessage+'\n';
 
-    this.dialogflowService.fetchResponse(this.userMessage).subscribe({
-      next: (response: any) => {
-        this.responseMessage = response.message;
-        const currentTimestampAgent = new Date().toISOString();
-        this.dialogues.push({ sender: 'agent', message: response.message });
+    // this.dialogflowService.fetchResponse(this.userMessage).subscribe({
+    //   next: (response: any) => {
+    //     this.responseMessage = response.message;
+    //     this.dialogues.push({ sender: 'agent', message: response.message });
 
-        this.databaseService.saveMessage(this.sessionId, response.message,currentTimestamp,'agent').subscribe({
-          next: (response) => console.log('agent message saved', response),
-          error: (error) => console.error('Error saving agent message:', error)
-        });
+    //     this.databaseService.saveMessage(this.sessionId, response.message,currentTimestamp,'agent').subscribe({
+    //       next: (response) => console.log('agent message saved', response),
+    //       error: (error) => console.error('Error saving agent message:', error)
+    //     });
+    //   },
+    //   error: (error) => console.error('Error sending the message:', error)
+    // });
+
+    this.conversationService.fetchResponse([this.formattedDialogues]).subscribe({
+      next: (response) => {
+          if (response.candidates && response.candidates[0].content && response.candidates[0].content.parts.length > 0) {
+            console.log('1:', response.candidates);
+            const textContent = response.candidates[0].content.parts[0].text;
+            try {
+              const parsedContent = JSON.parse(textContent);
+              this.responseMessage = parsedContent.response;
+              this.dialogues.push({ sender: 'agent', message: parsedContent.response });
+              // this.formattedDialogues.push('agent:'+parsedContent.response);
+              this.formattedDialogues+='agent:'+parsedContent.response+'\n';
+              console.log('2:', parsedContent);
+              console.log('3:', parsedContent.response);
+              this.databaseService.saveMessage(this.sessionId, parsedContent.response,currentTimestamp,'agent').subscribe({
+                next: (response) => console.log('agent message saved', response),
+                error: (error) => console.error('Error saving agent message:', error)
+              });
+            } catch (error) {
+              console.error('Error parsing the text content:', error);
+            }
+          }
+        
       },
       error: (error) => console.error('Error sending the message:', error)
     });
@@ -151,4 +181,5 @@ export class ConversationComponent implements OnInit {
       console.log('No user is currently logged in.');
     }
   }
+
 }

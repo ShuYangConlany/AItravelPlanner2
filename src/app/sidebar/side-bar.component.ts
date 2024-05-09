@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule} from '@angular/common/http';
 import { SessionInteractionService } from '../services/sessionInteractionService';
 import { authFactory } from '../auth/login-component/authFactory';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-side-bar',
@@ -16,6 +17,7 @@ import { authFactory } from '../auth/login-component/authFactory';
     RouterModule,
     CommonModule,
     HttpClientModule,
+    FormsModule  ,
   ],
   providers: [
     {
@@ -28,6 +30,7 @@ export class SideBarComponent {
   sessions: any[] = [];
   userId!: string
   activeSessionId: string | null = null;
+  private clickTimeout: any = null;
 
   
 
@@ -47,7 +50,7 @@ export class SideBarComponent {
         if (this.sessions.length > 0) {
           const firstSessionId = this.sessions[0].sessionId;
           this.activeSessionId = firstSessionId;
-          this.SessionInteractionService.changeFirstSession(firstSessionId);
+          this.SessionInteractionService.changeSession(firstSessionId);
         }
       },
       error: (error) => console.error('Error fetching sessions', error)
@@ -84,4 +87,26 @@ export class SideBarComponent {
       console.log('No user is currently logged in.');
     }
   }
+
+  updateSessionTitle(sessionId: string, title: string) {
+    this.sessionService.updateSessionTitle(sessionId, this.userId, title).subscribe({
+      next: () => {
+        console.log('Session title updated successfully');
+      },
+      error: (error) => {
+        console.error('Error updating session title:', error);
+      }
+    });
+  }
+
+  enableEdit(session: any) {
+    clearTimeout(this.clickTimeout);
+    this.clickTimeout = null;
+    session.editing = true;
+  }
+
+  disableEdit(session: any) {
+    session.editing = false;
+  }
+
 }

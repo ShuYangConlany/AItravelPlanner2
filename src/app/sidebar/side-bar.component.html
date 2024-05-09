@@ -8,14 +8,31 @@
         <a routerLink="/google-map" routerLinkActive="active" class="page_link">google-map</a>
     </div>
     <!-- <a routerLink="/conversation" routerLinkActive="active">conversation</a> -->
-    <div class="conversation-link" routerLink="/conversation" routerLinkActive="active">
+    <div class="conversation-link" routerLink="/conversation" routerLinkActive="inactive">
         conversation
         <div class="session_bundle">
             <div *ngFor="let session of sessions">
-                <!-- <a (click)="onSessionClick(session.sessionId)" class="session_link">{{ session.title }}</a> -->
-                <a (click)="onSessionClick(session.sessionId)"
+                
+                <!-- <a (click)="onSessionClick(session.sessionId)"
                     [class.active]="activeSessionId === session.sessionId"
                     class="session_link">{{ session.title }}</a>
+
+                    <input [(ngModel)]="session.title"
+                    (keyup.enter)="updateSessionTitle(session.sessionId, session.title)"
+                    [class.active]="activeSessionId === session.sessionId"
+                    class="session_input" />
+                </div> -->
+
+            <div (click)="onSessionClick(session.sessionId)"
+                (dblclick)="enableEdit(session)"
+                [class.active]="activeSessionId === session.sessionId"
+                class="session_link">
+                <input *ngIf="session.editing"
+                    [(ngModel)]="session.title"
+                    (keyup.enter)="updateSessionTitle(session.sessionId, session.title); disableEdit(session)"
+                    (blur)="updateSessionTitle(session.sessionId, session.title); disableEdit(session)"
+                    class="session_input" />
+                <span *ngIf="!session.editing">{{ session.title }}</span>
             </div>
             
         </div>

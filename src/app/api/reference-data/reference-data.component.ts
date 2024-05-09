@@ -21,7 +21,7 @@ export class ReferenceDataComponent {
   apiUrl = environment.apiUrl;
 
   onSubmit(): void {
-    const url = this.apiUrl+'reference_data';
+    const url = this.apiUrl+'/reference_data';
     const params = new HttpParams().set('cityName', this.cityName);
     this.http.get(url, { params: params }).subscribe({
       next: (response: any) => {

@@ -32,7 +32,7 @@ export class FlightOffersComponent implements OnInit {
   
   verifyFlightOffer(offer: any) {
     console.log('offer successful', offer);
-    const verifyUrl = this.apiUrl+'pricing';
+    const verifyUrl = this.apiUrl+'/pricing';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'X-HTTP-Method-Override':'GET'
@@ -55,7 +55,7 @@ export class FlightOffersComponent implements OnInit {
     }
   }
   submitForm() {
-    const url = this.apiUrl+'flight-offers';
+    const url = this.apiUrl+'/flight-offers';
     this.http.get(url, { params: this.formData }).subscribe({
       next: (data) => {
         this.flightOffers = data;
